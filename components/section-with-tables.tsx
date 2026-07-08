@@ -203,7 +203,7 @@ export function SectionWithTables({
           </div>
 
           <Card 
-            className="relative overflow-hidden min-h-[350px] p-8 border-0 shadow-lg"
+            className="relative overflow-hidden min-h-[350px] p-8 border-0 shadow-lg bg-gradient-to-br from-slate-800 via-slate-900 to-black"
             style={currentSection.background_image_url ? {
               backgroundImage: `url('${currentSection.background_image_url}')`,
               backgroundSize: 'cover',
