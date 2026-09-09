@@ -6,10 +6,15 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "Club Guvnor",
-  description: "Club Guvnor - A modern, customizable dashboard built with Next.js, React, and Tailwind CSS. Experience an elegant interface with magenta and purple theming.",
+  title: "Club Guvnor | The Premier Nightclub in Kampala",
+  description: "Welcome to Club Guvnor Uganda, Kampala's ultimate premium nightlife experience. Enjoy themed nights, top DJs, and exclusive VIP lounge spaces.",
   generator: "Club Guvnor",
+  keywords: ["club guvnor", "guvnor uganda", "nightclubs in kampala", "kampala nightlife", "club guvnor ug"],
+  alternates: {
+    canonical: "https://clubguvnorug.com",
+  },
 }
+
 
 export default function RootLayout({
   children,
