@@ -61,12 +61,21 @@ export default async function BookTablePage({
       .eq("event_id", eventId)
     tickets = eventTickets || []
 
-    // Fetch table_events for this event to see which tables are available
+    // Fetch the event's active table links first. Loading the related tables in a
+    // second query avoids relying on a nested Supabase relationship name.
     const { data: tableEvents } = await supabase
       .from("table_events")
-      .select("*, tables(*, club_sections(*))")
+      .select("table_id")
       .eq("event_id", eventId)
       .eq("is_active", true)
+
+    const tableIds = (tableEvents || []).map((tableEvent) => tableEvent.table_id).filter(Boolean)
+    const { data: eventTables } = tableIds.length
+      ? await supabase
+          .from("tables")
+          .select("*, club_sections(*)")
+          .in("id", tableIds)
+      : { data: [] }
 
     // Fetch active bookings for tables in this event
     const { data: bookings } = await supabase
@@ -77,11 +86,10 @@ export default async function BookTablePage({
       .in("payment_status", ["pending", "paid"])
     tableBookings = bookings || []
 
-    if (tableEvents && tableEvents.length > 0) {
-      // Deduplicate tables by ID to prevent duplicates
-      const allTables = tableEvents.map((te) => te.tables).filter(Boolean)
-      const uniqueTableMap = new Map()
-      allTables.forEach((table: any) => {
+    if (eventTables && eventTables.length > 0) {
+      // Deduplicate tables by ID to prevent duplicate event links from rendering twice.
+      const uniqueTableMap = new Map<string, any>()
+      eventTables.forEach((table: any) => {
         if (table && !uniqueTableMap.has(table.id)) {
           uniqueTableMap.set(table.id, table)
         }

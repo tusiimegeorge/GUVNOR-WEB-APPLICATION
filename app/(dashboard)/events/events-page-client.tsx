@@ -103,8 +103,11 @@ export function EventsPageClient({ events, user }: EventsPageClientProps) {
         // Use window.location.href for instant navigation with hash
         window.location.href = "/#comments-section"
       } else {
-        // For standard pricing, go to booking page
-        router.push(`/bookings?event=${selectedEventId}`)
+        // Every table reservation keeps the selected event in the booking URL.
+        // The booking page uses this ID to load only tables configured for the event.
+        setBookingModalOpen(false)
+        router.push(`/bookings?event=${encodeURIComponent(selectedEventId || "")}`)
+        return
       }
     }
     setBookingModalOpen(false)
